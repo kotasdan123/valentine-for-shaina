@@ -113,4 +113,115 @@
 <body>
 
     <div class="dedication">
-        For Shaina Ly
+        For Shaina Lyca Sam 🌸
+        <span class="secret-lover">From your secret lover.. GAB 💌</span>
+    </div>
+
+    <div id="videoOverlay">
+        <div id="videoLoading" style="color: white; margin-bottom: 10px; font-family: sans-serif;">Loading your surprise... ✨</div>
+        <video id="giftVideo" controls playsinline>
+            <source src="https://dl.dropboxusercontent.com/scl/fi/68kclit0wlgghjhb2z4kh/Surprise.mp4?rlkey=1mzfn1vjshg1rfcsie1luvtp0&st=32hw9ytk&raw=1" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div style="color: white; margin-top: 25px; font-size: 1.1rem; text-decoration: underline; cursor: pointer;" onclick="closeVideo()">Close Surprise ❌</div>
+    </div>
+
+    <div class="container" id="card">
+        <div id="content">
+            <h1>My QUEEN, can you be my Valentine's? 👑</h1>
+            <div id="beggingText" style="height:45px; color:var(--soft-pink); font-style:italic; font-weight:bold;">I promise to treat you like royalty! ✨</div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+                <button id="yesBtn">Yes! 😍</button>
+                <button id="noBtn">No 🥺</button>
+            </div>
+        </div>
+
+        <div id="message" class="celebration">
+            I knew you'd say Yes! <br>See you on February 16! 🥰
+            <span class="emoji-box">❤️💍👑</span>
+            <button id="moreBtn">You want more? click here</button>
+        </div>
+
+        <div id="secretGift" class="secret-gift-panel">
+            <h2>Secret Gift 🎁</h2>
+            <p style="color: var(--soft-pink); font-weight: bold;">This is a secret gift for your eyes only.</p>
+            <button id="videoBtn">Watch Your Surprise 🎥</button>
+            <span class="emoji-box">💖😘✨🌹💎</span>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const moreBtn = document.getElementById('moreBtn');
+        const videoBtn = document.getElementById('videoBtn');
+        const overlay = document.getElementById('videoOverlay');
+        const giftVideo = document.getElementById('giftVideo');
+        const loadingText = document.getElementById('videoLoading');
+        const beggingText = document.getElementById('beggingText');
+
+        // Logic for Yes
+        yesBtn.addEventListener('click', () => {
+            explodeHearts();
+            document.getElementById('content').style.display = 'none';
+            document.getElementById('message').style.display = 'block';
+            document.body.style.backgroundColor = '#ff4d6d';
+        });
+
+        // Logic for More
+        moreBtn.addEventListener('click', () => {
+            explodeHearts();
+            document.getElementById('message').style.display = 'none';
+            document.getElementById('secretGift').style.display = 'block';
+            document.body.style.backgroundColor = '#d00000';
+        });
+
+        // Logic for Video
+        videoBtn.addEventListener('click', () => {
+            overlay.style.display = 'flex';
+            giftVideo.style.display = 'none';
+            loadingText.style.display = 'block';
+            
+            giftVideo.load();
+            giftVideo.play().then(() => {
+                giftVideo.style.display = 'block';
+                loadingText.style.display = 'none';
+            }).catch(() => {
+                giftVideo.style.display = 'block';
+                loadingText.style.display = 'none';
+            });
+            explodeHearts();
+        });
+
+        function closeVideo() {
+            overlay.style.display = 'none';
+            giftVideo.pause();
+        }
+
+        // No button behavior
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = Math.random() * 80 + '%';
+            noBtn.style.top = Math.random() * 80 + '%';
+            beggingText.innerText = "Please say Yes... 🥺";
+        });
+
+        // Heart Background
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+        setInterval(createHeart, 400);
+
+        function explodeHearts() {
+            for(let i=0; i<50; i++) setTimeout(createHeart, i * 15);
+        }
+    </script>
+</body>
+</html>
