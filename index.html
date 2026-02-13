@@ -99,13 +99,19 @@
             font-weight: bold;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             touch-action: none; 
+            transition: 0.3s;
         }
 
-        #yesBtn { 
+        #yesBtn, #moreBtn { 
             background-color: #ff4d6d; 
             color: white; 
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             z-index: 5; 
+        }
+
+        #moreBtn {
+            margin-top: 20px;
+            font-size: 1rem;
+            background-color: #d00000;
         }
         
         #noBtn { 
@@ -115,8 +121,19 @@
             position: relative;
         }
         
-        .celebration { display: none; font-size: 1.5rem; color: #ff4d6d; font-weight: bold; }
-        .celebration span { font-size: 3.5rem; display: block; margin-top: 15px; animation: bounce 1s infinite; }
+        .celebration, .secret-gift-panel { 
+            display: none; 
+            font-size: 1.5rem; 
+            color: #ff4d6d; 
+            font-weight: bold; 
+        }
+
+        .secret-gift-panel h2 {
+            color: #d00000;
+            font-size: 2rem;
+        }
+
+        .emoji-box { font-size: 3.5rem; display: block; margin-top: 15px; animation: bounce 1s infinite; }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
@@ -140,18 +157,28 @@
                 <button id="noBtn">No 🥺</button>
             </div>
         </div>
+
         <div id="message" class="celebration">
             I knew you'd say Yes! <br>See you on February 16! 🥰
-            <span>❤️💍👑</span>
+            <span class="emoji-box">❤️💍👑</span>
+            <button id="moreBtn">You want more? click here</button>
+        </div>
+
+        <div id="secretGift" class="secret-gift-panel">
+            <h2>Secret Gift 🎁</h2>
+            <p>This is a secret gift for your eyes only.</p>
+            <span class="emoji-box">💖😘✨🌹💎</span>
         </div>
     </div>
 
     <script>
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
+        const moreBtn = document.getElementById('moreBtn');
         const card = document.getElementById('card');
         const content = document.getElementById('content');
         const message = document.getElementById('message');
+        const secretGift = document.getElementById('secretGift');
         const beggingText = document.getElementById('beggingText');
 
         const phrases = [
@@ -182,6 +209,12 @@
         }
         setInterval(createHeart, 300);
 
+        function explodeHearts() {
+            for(let i=0; i<100; i++) {
+                setTimeout(createHeart, i * 10);
+            }
+        }
+
         function moveNoButton(e) {
             card.classList.add('shake');
             setTimeout(() => card.classList.remove('shake'), 500);
@@ -211,19 +244,24 @@
             moveNoButton();
         });
 
+        // Click Yes: Go to Panel 2
         yesBtn.addEventListener('click', () => {
+            explodeHearts();
             content.style.display = 'none';
             document.querySelector('.dedication').style.display = 'none';
             message.style.display = 'block';
             document.body.style.backgroundColor = '#ff4d6d';
             noBtn.style.display = 'none';
-            
-            for(let i=0; i<100; i++) {
-                setTimeout(createHeart, i * 10);
-            }
         });
+
+        // Click More: Go to Panel 3
+        moreBtn.addEventListener('click', () => {
+            explodeHearts();
+            message.style.display = 'none';
+            secretGift.style.display = 'block';
+            document.body.style.backgroundColor = '#d00000'; // Darker red for the secret gift
+        });
+
     </script>
 </body>
 </html>
-
-
