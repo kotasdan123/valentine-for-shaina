@@ -17,14 +17,6 @@
             transition: background 0.5s;
         }
 
-        #trailCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
         .dedication {
             position: absolute;
             top: 20px;
@@ -34,19 +26,44 @@
             font-weight: bold;
             font-size: 1.3rem;
             z-index: 20;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
         }
 
+        .secret-lover {
+            display: block;
+            font-size: 1.1rem;
+            color: #ff4d6d;
+            font-style: italic;
+            margin-top: 5px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px rgba(255, 77, 109, 0.3);
+        }
+
+        /* Falling Hearts */
         .heart {
             position: fixed;
-            top: -20px;
+            top: -10px;
             color: #ff4d6d;
             font-size: 20px;
-            pointer-events: none;
+            user-select: none;
             z-index: -1;
             animation: fall linear forwards;
         }
         @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
+            to { transform: translateY(105vh) rotate(360deg); }
+        }
+
+        /* Screen Shake Effect */
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            50% { transform: translate(-1px, 2px) rotate(1deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            100% { transform: translate(1px, -2px) rotate(0deg); }
         }
 
         .container {
@@ -58,6 +75,7 @@
             z-index: 10;
             width: 85%;
             max-width: 400px;
+            transition: all 0.3s ease;
         }
 
         h1 { color: #d00000; font-size: 1.8rem; margin-bottom: 10px; }
@@ -80,39 +98,41 @@
             border-radius: 50px;
             font-weight: bold;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: transform 0.1s ease;
+            touch-action: none; 
+            transition: 0.3s;
         }
 
+        #yesBtn, #moreBtn { 
+            background-color: #ff4d6d; 
+            color: white; 
+            z-index: 5; 
+        }
+
+        #moreBtn {
+            margin-top: 20px;
+            font-size: 1rem;
+            background-color: #d00000;
+        }
+        
         #noBtn { 
             background-color: #888; 
             color: white; 
+            z-index: 4;
             position: relative;
-            z-index: 100;
-            transition: all 0.2s ease;
-        }
-
-        #yesBtn { background-color: #ff4d6d; color: white; }
-
-        .score-display {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: #d00000;
-            font-weight: bold;
-        }
-
-        #musicControl {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: #fff;
-            padding: 10px 15px;
-            border-radius: 50px;
-            cursor: pointer;
-            border: 1px solid #ff4d6d;
         }
         
-        .celebration, .secret-gift-panel { display: none; font-size: 1.5rem; color: #ff4d6d; font-weight: bold; }
+        .celebration, .secret-gift-panel { 
+            display: none; 
+            font-size: 1.5rem; 
+            color: #ff4d6d; 
+            font-weight: bold; 
+        }
+
+        .secret-gift-panel h2 {
+            color: #d00000;
+            font-size: 2rem;
+        }
+
         .emoji-box { font-size: 3.5rem; display: block; margin-top: 15px; animation: bounce 1s infinite; }
 
         @keyframes bounce {
@@ -123,15 +143,9 @@
 </head>
 <body>
 
-    <canvas id="trailCanvas"></canvas>
-    <div id="musicControl">🎵 Play Music</div>
-    <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
-    </audio>
-
     <div class="dedication">
-        For YOU 🌸
-        <span class="secret-lover" style="display:block; font-size:1.1rem; color:#ff4d6d; font-style:italic;">From your Secret Lover.. 💌</span>
+        For Shaina Lyca Sam 🌸
+        <span class="secret-lover">From your secret lover.. GAB 💌</span>
     </div>
 
     <div class="container" id="card">
@@ -139,21 +153,20 @@
             <h1>My QUEEN, can you be my Valentine's? 👑</h1>
             <span id="beggingText">I promise to treat you like royalty! ✨</span>
             <div class="buttons">
-                <button id="noBtn">No 🥺</button>
                 <button id="yesBtn">Yes! 😍</button>
+                <button id="noBtn">No 🥺</button>
             </div>
-            <div class="score-display">Heartbreak Score: <span id="scoreVal">0</span></div>
         </div>
 
         <div id="message" class="celebration">
             I knew you'd say Yes! <br>See you on February 16! 🥰
             <span class="emoji-box">❤️💍👑</span>
-            <button id="moreBtn" style="margin-top:20px; background:#ff4d6d; color:white;">You want more? click here</button>
+            <button id="moreBtn">You want more? click here</button>
         </div>
 
         <div id="secretGift" class="secret-gift-panel">
             <h2>Secret Gift 🎁</h2>
-            <p id="finalScore"></p>
+            <p>This is a secret gift for your eyes only.</p>
             <span class="emoji-box">💖😘✨🌹💎</span>
         </div>
     </div>
@@ -162,109 +175,93 @@
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
         const moreBtn = document.getElementById('moreBtn');
+        const card = document.getElementById('card');
         const content = document.getElementById('content');
         const message = document.getElementById('message');
         const secretGift = document.getElementById('secretGift');
         const beggingText = document.getElementById('beggingText');
-        const scoreDisplay = document.getElementById('scoreVal');
-        const musicControl = document.getElementById('musicControl');
-        const bgMusic = document.getElementById('bgMusic');
-        const canvas = document.getElementById('trailCanvas');
-        const ctx = canvas.getContext('2d');
 
-        let score = 0;
-        let yesSize = 1;
-        let particles = [];
+        const phrases = [
+            "Are you sure? 🥺",
+            "Please don't do this... 💔",
+            "I'll give you all my attention! 💎",
+            "Think of the February 16 date! 🌹",
+            "I'll be the best Valentine ever!",
+            "Look at the Yes button, it's so big! 👉",
+            "My Queen deserves better than a No! 👑",
+            "Okay, that was a misclick, right?",
+            "I'm begging you! 🙏",
+            "Don't break my heart! 🥀"
+        ];
 
-        // Setup Canvas
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        let yesSize = 1.2;
+        let phraseIndex = 0;
 
-        function createFirework(x, y) {
-            for (let i = 0; i < 30; i++) {
-                particles.push({
-                    x: x, y: y,
-                    dx: (Math.random() - 0.5) * 8,
-                    dy: (Math.random() - 0.5) * 8,
-                    size: Math.random() * 4 + 2,
-                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-                    life: 1
-                });
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = ['❤️', '💖', '💝', '✨'][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
+
+        function explodeHearts() {
+            for(let i=0; i<100; i++) {
+                setTimeout(createHeart, i * 10);
             }
         }
 
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, i) => {
-                p.x += p.dx; p.y += p.dy; p.life -= 0.02;
-                ctx.globalAlpha = p.life;
-                ctx.fillStyle = p.color;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
-                if (p.life <= 0) particles.splice(i, 1);
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
+        function moveNoButton(e) {
+            card.classList.add('shake');
+            setTimeout(() => card.classList.remove('shake'), 500);
 
-        function moveNo() {
-            // "Avoid" logic: only move if score is high or random chance
-            const shouldAvoid = score > 10 || Math.random() > 0.5;
-            if (!shouldAvoid) return;
-
-            // Speed logic: faster after 50 clicks
-            const speed = score >= 50 ? "0.1s" : "0.3s";
-            noBtn.style.transition = `all ${speed} ease`;
-
-            const x = Math.random() * (window.innerWidth - 150);
-            const y = Math.random() * (window.innerHeight - 100);
             noBtn.style.position = 'fixed';
-            noBtn.style.left = x + 'px';
-            noBtn.style.top = y + 'px';
+            
+            const padding = 50;
+            let newX = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
+            let newY = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
+            
+            noBtn.style.left = `${newX}px`;
+            noBtn.style.top = `${newY}px`;
+
+            beggingText.innerText = phrases[phraseIndex];
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+
+            yesSize += 0.4;
+            yesBtn.style.transform = `scale(${yesSize})`;
+            
+            const redness = Math.min(255, 225 + (phraseIndex * 2));
+            document.body.style.backgroundColor = `rgb(${redness}, 228, 225)`;
         }
 
-        noBtn.onmouseover = moveNo;
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNoButton();
+        });
 
-        noBtn.onclick = () => {
-            score++;
-            scoreDisplay.innerText = score;
-            
-            // Explosion every 10 clicks
-            if (score % 10 === 0) {
-                const rect = noBtn.getBoundingClientRect();
-                createFirework(rect.left + rect.width/2, rect.top + rect.height/2);
-            }
-
-            // Move after click too
-            moveNo();
-
-            // Grow the Yes button
-            yesSize += 0.15;
-            yesBtn.style.transform = `scale(${yesSize})`;
-            beggingText.innerText = "Wait, you actually clicked it?! 💔";
-        };
-
-        yesBtn.onclick = () => {
+        // Click Yes: Go to Panel 2
+        yesBtn.addEventListener('click', () => {
+            explodeHearts();
             content.style.display = 'none';
+            document.querySelector('.dedication').style.display = 'none';
             message.style.display = 'block';
-            document.body.style.backgroundColor = '#ffb6c1';
+            document.body.style.backgroundColor = '#ff4d6d';
             noBtn.style.display = 'none';
-        };
+        });
 
-        moreBtn.onclick = () => {
+        // Click More: Go to Panel 3
+        moreBtn.addEventListener('click', () => {
+            explodeHearts();
             message.style.display = 'none';
             secretGift.style.display = 'block';
-            document.getElementById('finalScore').innerHTML = `Final Heartbreak Score: ${score} <br> I still love you though! ❤️`;
-        };
-
-        musicControl.onclick = () => {
-            if (bgMusic.paused) { bgMusic.play(); musicControl.innerText = "⏸ Pause"; }
-            else { bgMusic.pause(); musicControl.innerText = "🎵 Play"; }
-        };
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            document.body.style.backgroundColor = '#d00000'; // Darker red for the secret gift
         });
+
     </script>
 </body>
 </html>
