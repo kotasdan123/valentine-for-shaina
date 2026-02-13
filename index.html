@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My QUEEN can you be my valintines?</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #ffe4e1;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            margin: 0;
+            transition: background 0.5s;
+        }
+
+        .dedication {
+            position: absolute;
+            top: 20px;
+            width: 90%;
+            text-align: center;
+            color: #d00000;
+            font-weight: bold;
+            font-size: 1.2rem;
+            z-index: 20;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        /* Falling Hearts */
+        .heart {
+            position: fixed;
+            top: -10px;
+            color: #ff4d6d;
+            font-size: 20px;
+            user-select: none;
+            z-index: -1;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(105vh) rotate(360deg); }
+        }
+
+        /* Screen Shake Effect */
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            50% { transform: translate(-1px, 2px) rotate(1deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            100% { transform: translate(1px, -2px) rotate(0deg); }
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.3);
+            z-index: 10;
+            width: 85%;
+            max-width: 400px;
+            transition: all 0.3s ease;
+        }
+
+        h1 { color: #d00000; font-size: 1.8rem; margin-bottom: 10px; }
+        #beggingText { height: 40px; color: #ff4d6d; font-style: italic; font-weight: bold; margin-bottom: 15px; display: block;}
+        
+        .buttons { 
+            margin-top: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 20px;
+            min-height: 180px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            touch-action: none; /* Crucial for mobile avoidance */
+        }
+
+        #yesBtn { 
+            background-color: #ff4d6d; 
+            color: white; 
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            z-index: 5; 
+        }
+        
+        #noBtn { 
+            background-color: #888; 
+            color: white; 
+            z-index: 4;
+            position: relative;
+        }
+        
+        .celebration { display: none; font-size: 1.5rem; color: #ff4d6d; font-weight: bold; }
+        .celebration span { font-size: 3.5rem; display: block; margin-top: 15px; animation: bounce 1s infinite; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dedication">
+        For Shaina Lyca Sam 🌸<br>
+        From Daniel Gabriel Roda ⚡
+    </div>
+
+    <div class="container" id="card">
+        <div id="content">
+            <h1>My QUEEN can you be my valintines? 👑</h1>
+            <span id="beggingText">I promise to treat you like royalty! ✨</span>
+            <div class="buttons">
+                <button id="yesBtn">Yes! 😍</button>
+                <button id="noBtn">No 🥺</button>
+            </div>
+        </div>
+        <div id="message" class="celebration">
+            I knew you'd say Yes! <br>See you on February 16! 🥰
+            <span>❤️💍👑</span>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const card = document.getElementById('card');
+        const content = document.getElementById('content');
+        const message = document.getElementById('message');
+        const beggingText = document.getElementById('beggingText');
+
+        const phrases = [
+            "Are you sure? 🥺",
+            "Please don't do this... 💔",
+            "I'll give you all my attention! 💎",
+            "Think of the February 16 date! 🌹",
+            "I'll be the best Valentine ever!",
+            "Look at the Yes button, it's so big! 👉",
+            "My Queen deserves better than a No! 👑",
+            "Okay, that was a misclick, right?",
+            "I'm begging you! 🙏",
+            "Don't break my heart! 🥀"
+        ];
+
+        let yesSize = 1.2;
+        let phraseIndex = 0;
+
+        // Falling Hearts Generator
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = ['❤️', '💖', '💝', '✨'][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
+
+        // Advanced Avoidance Logic
+        function moveNoButton(e) {
+            // Add shake effect to the card
+            card.classList.add('shake');
+            setTimeout(() => card.classList.remove('shake'), 500);
+
+            // Change button to absolute on first attempt
+            noBtn.style.position = 'fixed';
+            
+            // Calculate a random position that is NOT under the cursor
+            const padding = 50;
+            let newX = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
+            let newY = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
+            
+            noBtn.style.left = `${newX}px`;
+            noBtn.style.top = `${newY}px`;
+
+            // Update begging text
+            beggingText.innerText = phrases[phraseIndex];
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+
+            // Grow the Yes Button
+            yesSize += 0.4;
+            yesBtn.style.transform = `scale(${yesSize})`;
+            
+            // Change background color slightly more red each time
+            const redness = Math.min(255, 225 + (phraseIndex * 2));
+            document.body.style.backgroundColor = `rgb(${redness}, 228, 225)`;
+        }
+
+        // Event listeners for both mouse and touch
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        // The Big "Yes" Moment
+        yesBtn.addEventListener('click', () => {
+            content.style.display = 'none';
+            document.querySelector('.dedication').style.display = 'none';
+            message.style.display = 'block';
+            document.body.style.backgroundColor = '#ff4d6d';
+            noBtn.style.display = 'none';
+            
+            // Massive Heart Explosion
+            for(let i=0; i<100; i++) {
+                setTimeout(createHeart, i * 10);
+            }
+        });
+    </script>
+</body>
+</html>
