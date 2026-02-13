@@ -24,9 +24,18 @@
             text-align: center;
             color: #d00000;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             z-index: 20;
             text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .secret-lover {
+            display: block;
+            font-size: 1rem;
+            color: #ff4d6d;
+            font-style: italic;
+            margin-top: 5px;
+            letter-spacing: 1px;
         }
 
         /* Falling Hearts */
@@ -88,7 +97,7 @@
             border-radius: 50px;
             font-weight: bold;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            touch-action: none; /* Crucial for mobile avoidance */
+            touch-action: none; 
         }
 
         #yesBtn { 
@@ -117,8 +126,8 @@
 <body>
 
     <div class="dedication">
-        For Shaina Lyca Sam 🌸<br>
-        From Daniel Gabriel Roda ⚡
+        For Shaina Lyca Sam 🌸
+        <span class="secret-lover">From your secret lover.. GAB 💌</span>
     </div>
 
     <div class="container" id="card">
@@ -160,7 +169,6 @@
         let yesSize = 1.2;
         let phraseIndex = 0;
 
-        // Falling Hearts Generator
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
@@ -173,16 +181,12 @@
         }
         setInterval(createHeart, 300);
 
-        // Advanced Avoidance Logic
         function moveNoButton(e) {
-            // Add shake effect to the card
             card.classList.add('shake');
             setTimeout(() => card.classList.remove('shake'), 500);
 
-            // Change button to absolute on first attempt
             noBtn.style.position = 'fixed';
             
-            // Calculate a random position that is NOT under the cursor
             const padding = 50;
             let newX = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
             let newY = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
@@ -190,27 +194,22 @@
             noBtn.style.left = `${newX}px`;
             noBtn.style.top = `${newY}px`;
 
-            // Update begging text
             beggingText.innerText = phrases[phraseIndex];
             phraseIndex = (phraseIndex + 1) % phrases.length;
 
-            // Grow the Yes Button
             yesSize += 0.4;
             yesBtn.style.transform = `scale(${yesSize})`;
             
-            // Change background color slightly more red each time
             const redness = Math.min(255, 225 + (phraseIndex * 2));
             document.body.style.backgroundColor = `rgb(${redness}, 228, 225)`;
         }
 
-        // Event listeners for both mouse and touch
         noBtn.addEventListener('mouseover', moveNoButton);
         noBtn.addEventListener('touchstart', (e) => {
             e.preventDefault();
             moveNoButton();
         });
 
-        // The Big "Yes" Moment
         yesBtn.addEventListener('click', () => {
             content.style.display = 'none';
             document.querySelector('.dedication').style.display = 'none';
@@ -218,7 +217,6 @@
             document.body.style.backgroundColor = '#ff4d6d';
             noBtn.style.display = 'none';
             
-            // Massive Heart Explosion
             for(let i=0; i<100; i++) {
                 setTimeout(createHeart, i * 10);
             }
