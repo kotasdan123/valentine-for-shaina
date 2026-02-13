@@ -17,7 +17,7 @@
             align-items: center;
             height: 100vh;
             background-color: var(--bg-color);
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
             margin: 0;
             transition: background 0.5s;
@@ -35,13 +35,7 @@
             z-index: 20;
         }
 
-        .secret-lover {
-            display: block;
-            font-size: 1rem;
-            color: var(--soft-pink);
-            font-style: italic;
-            margin-top: 5px;
-        }
+        .secret-lover { display: block; font-size: 1rem; color: var(--soft-pink); font-style: italic; margin-top: 5px; }
 
         /* Falling Hearts */
         .heart {
@@ -54,9 +48,7 @@
             animation: fall linear forwards;
         }
 
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
-        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
         /* Main Card */
         .container {
@@ -68,6 +60,8 @@
             z-index: 10;
             width: 85%;
             max-width: 350px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
         h1, h2 { color: var(--primary-red); font-size: 1.6rem; margin-bottom: 10px; }
@@ -88,13 +82,19 @@
         #videoBtn { background: linear-gradient(45deg, #ff4d6d, #d00000); }
         #noBtn { background-color: #a0a0a0; color: white; position: relative; }
         
-        .celebration, .secret-gift-panel { display: none; }
-        .emoji-box { font-size: 3rem; display: block; margin: 15px 0; animation: bounce 1.2s infinite; }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+        .celebration, .secret-gift-panel, .final-letter { display: none; }
+        
+        /* Letter Styling */
+        .final-letter p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #444;
+            text-align: left;
+            font-style: italic;
         }
+
+        .emoji-box { font-size: 3rem; display: block; margin: 15px 0; animation: bounce 1.2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
         /* VIDEO MODAL */
         #videoOverlay {
@@ -121,9 +121,8 @@
         <div id="videoLoading" style="color: white; margin-bottom: 10px; font-family: sans-serif;">Loading your surprise... ✨</div>
         <video id="giftVideo" controls playsinline>
             <source src="https://dl.dropboxusercontent.com/scl/fi/68kclit0wlgghjhb2z4kh/Surprise.mp4?rlkey=1mzfn1vjshg1rfcsie1luvtp0&st=32hw9ytk&raw=1" type="video/mp4">
-            Your browser does not support the video tag.
         </video>
-        <div style="color: white; margin-top: 25px; font-size: 1.1rem; text-decoration: underline; cursor: pointer;" onclick="closeVideo()">Close Surprise ❌</div>
+        <div style="color: white; margin-top: 25px; font-size: 1.1rem; text-decoration: underline; cursor: pointer;" onclick="closeVideo()">Close & See Final Message 💌</div>
     </div>
 
     <div class="container" id="card">
@@ -148,6 +147,19 @@
             <button id="videoBtn">Watch Your Surprise 🎥</button>
             <span class="emoji-box">💖😘✨🌹💎</span>
         </div>
+
+        <div id="finalLetter" class="final-letter">
+            <h2>Dear Shaina,</h2>
+            <p>
+                There is so much comfort in the way we just 'fit' together, and I never want to take that for granted. 
+                Thank you for accepting me into your life and for giving me a space where I can truly be myself. 
+                Whether we’re out celebrating or just hanging out, there’s no one else I’d rather have by my side.
+                <br><br>
+                You’re my favorite person, my best friend, and my greatest crush. I love you..
+            </p>
+            <h3 style="color: var(--primary-red); text-align: right;">— Gab 🌹</h3>
+            <span class="emoji-box">♾️❤️🔐</span>
+        </div>
     </div>
 
     <script>
@@ -160,7 +172,6 @@
         const loadingText = document.getElementById('videoLoading');
         const beggingText = document.getElementById('beggingText');
 
-        // Logic for Yes
         yesBtn.addEventListener('click', () => {
             explodeHearts();
             document.getElementById('content').style.display = 'none';
@@ -168,7 +179,6 @@
             document.body.style.backgroundColor = '#ff4d6d';
         });
 
-        // Logic for More
         moreBtn.addEventListener('click', () => {
             explodeHearts();
             document.getElementById('message').style.display = 'none';
@@ -176,12 +186,10 @@
             document.body.style.backgroundColor = '#d00000';
         });
 
-        // Logic for Video
         videoBtn.addEventListener('click', () => {
             overlay.style.display = 'flex';
             giftVideo.style.display = 'none';
             loadingText.style.display = 'block';
-            
             giftVideo.load();
             giftVideo.play().then(() => {
                 giftVideo.style.display = 'block';
@@ -196,18 +204,21 @@
         function closeVideo() {
             overlay.style.display = 'none';
             giftVideo.pause();
+            // Transition to the final letter
+            document.getElementById('secretGift').style.display = 'none';
+            document.getElementById('finalLetter').style.display = 'block';
+            document.body.style.backgroundColor = '#b00000'; // Final deep red
+            explodeHearts();
         }
 
-        // No button behavior
         noBtn.addEventListener('touchstart', (e) => {
             e.preventDefault();
             noBtn.style.position = 'fixed';
-            noBtn.style.left = Math.random() * 80 + '%';
-            noBtn.style.top = Math.random() * 80 + '%';
+            noBtn.style.left = Math.random() * 70 + 10 + '%';
+            noBtn.style.top = Math.random() * 70 + 10 + '%';
             beggingText.innerText = "Please say Yes... 🥺";
         });
 
-        // Heart Background
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
